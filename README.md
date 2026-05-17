@@ -1,6 +1,8 @@
+# McTosh Tweaks
+
 <div align="center">
 
-# 🌌 Fynelium for MacOS
+## 🌌 Fynelium for MacOS
 
 ![License](https://img.shields.io/github/license/MrGrappleMan/Fynelium-DW?style=for-the-badge)
 ![Last Commit](https://img.shields.io/github/last-commit/MrGrappleMan/Fynelium-DW?style=for-the-badge)
@@ -11,12 +13,11 @@
 **✨ Optimize 🔹 Beautify 🔹 Automate 🔹 Effortlessly ✨**
 
 </div>
+
 ## ⚙️ Installation
-```
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install fish
-echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells
-fish_add_path "/opt/homebrew/bin/"
+
+``` zsh
+sudo zsh -c "$(curl -fsSL https://raw.githubusercontent.com/MrGrappleMan/McTosh-tweaks/refs/heads/main/)"
 
 ```
 
