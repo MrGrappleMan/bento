@@ -1,5 +1,8 @@
 #!/usr/bin/env fish
 
+## Add Homebrew to PATH
+fish_add_path "/opt/homebrew/bin/"
+
 ## Variables
 dfwrt="defaults write"
 
@@ -7,10 +10,10 @@ dfwrt="defaults write"
 dfwrt com.apple.frameworks.diskimages skip-verify -bool false
 dfwrt com.apple.frameworks.diskimages skip-verify-locked -bool false
 dfwrt com.apple.frameworks.diskimages skip-verify-remote -bool false
-tmutil enable # Allow system rollbacks like Atomic Distros
-dfwrt com.apple.Finder WarnOnEmptyTrash -bool true # Just to be safe
+tmutil enable # Allow system rollbacks
+dfwrt com.apple.Finder WarnOnEmptyTrash -bool true # Warn user when emptying trash, to be careful
 
-# Font Smoothing, makes text viewing comfortable
+# Font Smoothing and antialiasing
 dfwrt -g CGFontRenderingFontSmoothingDisabled -bool NO
 defaults -currentHost write -globalDomain AppleFontSmoothing -int 3
 
@@ -50,9 +53,9 @@ pmset -b sleep 2
 # ON HiDPI, better external screen resolution
 sudo dfwrt /Library/Preferences/com.apple.windowserver.plist DisplayResolutionEnabled -bool true
 
-# Bluetooth Optimizations, better bluetooth experience
+# Bluetooth codecs
 dfwrt bluetoothaudiod "Enable AptX codec" -bool true
 dfwrt bluetoothaudiod "Enable AAC codec" -bool true
 
-# 64 bit application support
+# x86_64 support
 softwareupdate --install-rosetta --agree-to-license
