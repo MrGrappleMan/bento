@@ -13,6 +13,6 @@ source ~/.zshrc
 brew install fish git
 
 # Clone the repository
-git clone https://github.com/MrGrappleMan/McTosh-tweaks.git
-cd McTosh-tweaks
+git clone https://github.com/MrGrappleMan/bento.git
+cd bento
 

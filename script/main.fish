@@ -17,6 +17,7 @@ dfwrt com.apple.Finder WarnOnEmptyTrash -bool true # Warn user when emptying tra
 dfwrt -g CGFontRenderingFontSmoothingDisabled -bool NO
 defaults -currentHost write -globalDomain AppleFontSmoothing -int 3
 
+
 # Productivity
 sudo dfwrt /Library/Preferences/com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true # Add them if you want to manually
 dfwrt com.apple.finder "FXEnableExtensionChangeWarning" -bool "false" # Not permanently destructive, no warning required here
