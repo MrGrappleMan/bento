@@ -1,0 +1,19 @@
+defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
+defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
+defaults write /Library/Preferences/com.apple.mDNSResponder.plist NoMulticastAdvertisements -bool NO
+defaults write bluetoothaudiod "Enable AAC codec" -bool true
+defaults write bluetoothaudiod "Enable AptX codec" -bool true
+defaults write com.apple.appleseed.FeedbackAssistant Autogather -bool true
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool false
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool false
+
+defaults write com.apple.frameworks.diskimages skip-verify -bool false
+defaults write com.apple.frameworks.diskimages skip-verify-locked -bool false
+defaults write com.apple.frameworks.diskimages skip-verify-remote -bool false
+defaults write com.apple.LaunchServices LSQuarantine -bool true
+defaults write com.apple.TextEdit RichText -int 0 # Just use Notion or Obsidian instead of this
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+defaults write /Library/Preferences/com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true # Add them if you want to manually
+defaults write /Library/Preferences/com.apple.windowserver.plist DisplayResolutionEnabled -bool true
+defaults write -currentHost -globalDomain AppleFontSmoothing -int 3
