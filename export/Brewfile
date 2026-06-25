@@ -1,5 +1,27 @@
-brew "git"
-brew "python"
-cask "visual-studio-code"
-cask "google-chrome"
-brew "fish"
+## Homebrew declarative setup ##
+
+# REPOS #
+
+tap "pol-rivero/tap"
+tap "homebrew/cask-versions"
+
+# PACKAGES #
+
+# Power user utilities
+    brew "fish"
+
+# Development
+    ## Version Control
+        brew "git"
+        cask "github-desktop-plus"
+        brew "jj"
+        brew "jjui"
+    ## Language files
+        ### Python
+            brew "python"
+        ### Rust
+            brew "rust"
+
+# Essentials
+    ## Web browser
+

@@ -1,7 +1,10 @@
 #!/usr/bin/env zsh
 
 # Go to home directory
-cd
+cd /tmp/
+
+# Remove existing repo files
+rm -rf /tmp/bento
 
 # Install Homebrew
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"

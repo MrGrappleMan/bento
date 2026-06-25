@@ -1,0 +1,2 @@
+    defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+    defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
