@@ -1,27 +1,74 @@
 ## Homebrew declarative setup ##
 
 # REPOS #
-
-tap "pol-rivero/tap"
-tap "homebrew/cask-versions"
+    tap "pol-rivero/tap"
+    tap "glzr-io/tap"
+    tap "domt4/autoupdate"
+    tap "homebrew/cask-cask"
+    tap "center2055/onionhop"
 
 # PACKAGES #
-
-# Power user utilities
-    brew "fish"
-
-# Development
-    ## Version Control
+    # Version Control
         brew "git"
+        brew "git-lfs"
         cask "github-desktop-plus"
         brew "jj"
         brew "jjui"
-    ## Language files
-        ### Python
-            brew "python"
-        ### Rust
+    # IDEs and Terminals
+        cask "zed"
+        cask "warp"
+    # CLI Utilities
+        brew "fish"
+        brew "speedtest-cli"
+        brew "aria2"
+        brew "zoxide"
+        brew "fzf"
+    # Languages / Package Managers
+        # Rust
             brew "rust"
+        # C / C++
 
-# Essentials
-    ## Web browser
-
+        # Swift
+            brew "swift"
+            brew "xcode-build-server"
+        # Python
+            brew "python"
+    # Compilers
+        brew "llvm"
+        brew "gcc"
+        brew "clang"
+    # Containerization / Orchestration
+        brew "podman"
+        brew "podman-compose"
+        brew "podman-desktop"
+        brew "kubectl"
+    # Virtualization
+        cask "utm"
+    # Media sharing
+        cask "localsend"
+    # Desktop / Window Manager Utilities
+        cask "glazewm"
+        cask "zebar"
+        cask "raycast"
+    # Maintenance and Updates
+        cask "maintenance"
+    # Office Suite
+        cask "onlyoffice"
+    # Artificial Intelligence
+        brew "ollama"
+    # Art / 3D Rendering / Animation
+        cask "blender"
+        brew "krita"
+    # Video Editing / Streaming backends
+        brew "ffmpeg"
+        cask "obs"
+    # Idle compute
+        cask "boinc"
+    # Internet / VPNs / Firewalls
+        brew "tor"
+        brew "snowflake"
+        brew "tailscale"
+        brew "onionhop"
+        cask "tor-browser@alpha"
+    # File(system) management
+        brew "macfuse"
