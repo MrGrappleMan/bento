@@ -22,4 +22,4 @@ git clone https://github.com/MrGrappleMan/bento.git
 cd /tmp/bento
 
 # Run main script
-zsh main.fish
+fish main.fish
