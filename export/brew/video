@@ -1,0 +1,7 @@
+## Video tools ##
+# For video editing and streaming
+
+# CLI
+    brew "ffmpeg"
+# Streaming
+    cask "obs"

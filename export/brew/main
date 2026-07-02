@@ -1,0 +1,35 @@
+## General packages ##
+# Packages to install without confirmation
+# Mostly general purpose utilities that are not specific to any workflow or profession
+
+# REPOS #
+    tap "pol-rivero/tap"
+    tap "glzr-io/tap"
+    tap "domt4/autoupdate"
+    tap "homebrew/cask-cask"
+    tap "center2055/onionhop"
+
+# PACKAGES #
+    # CLI
+        brew "fish"
+        brew "speedtest-cli"
+        brew "aria2"
+        brew "zoxide"
+        brew "fzf"
+    # Virtualization
+        cask "utm"
+    # File sharing and syncing
+        cask "localsend"
+        brew "macfuse"
+    # Desktop / Window Management
+        cask "glazewm"
+        cask "zebar"
+        cask "raycast"
+    # Maintenance and Updates
+        cask "maintenance"
+    # Office Suite
+        cask "onlyoffice"
+    # Artificial Intelligence
+        brew "ollama"
+    # Idle compute
+        cask "boinc"

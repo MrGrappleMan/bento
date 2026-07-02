@@ -1,0 +1,26 @@
+## Network tools ##
+# For desktop access, anonymous browsing, pentesting and file sharing
+
+# Tor
+    brew "tor"
+    brew "snowflake"
+    brew "onionhop"
+    cask "tor-browser@alpha"
+
+# WireGuard
+    brew "tailscale"
+    brew "wireguard"
+
+# Remote Access
+    brew "mosh"
+    brew "sshuttle"
+
+# Desktop viewing
+    cask "moonlight"
+
+# Monitoring
+    brew "nmap"
+    brew "wireshark"
+
+# Alternative networking
+    cask "bitchat-tui"

@@ -1,0 +1,29 @@
+## Development tools ##
+# For software development
+
+# Version Control
+    brew "git"
+    brew "git-lfs"
+    cask "github-desktop-plus"
+    brew "jj"
+    brew "jjui"
+# IDEs and Terminals
+    cask "zed"
+    cask "warp"
+# Languages / Package Managers
+    # Rust
+        brew "rust"
+    # Swift
+        brew "swift"
+        brew "xcode-build-server"
+    # Python
+        brew "python"
+    # Compilers
+        brew "llvm"
+        brew "gcc"
+        brew "clang"
+# Containerization / Orchestration
+    brew "podman"
+    brew "podman-compose"
+    brew "podman-desktop"
+    brew "kubectl"
