@@ -26,12 +26,12 @@
 # Use TouchID for convenience or disable lock upon screen sleep
 sudo pmset -a sleep 5 # Sleep after 5 minutes of inactivity (reduce main reason for power consumption)
 sudo pmset -a displaysleep 4 # Turn off display after 4 minutes of inactivity (Reduce burn-in risk, discoloration and power consumption)
-sudo pmset -a disksleep 5 # 0 = always on, other positive values = macos does sleeping timeout automatically, value not obeyed. Mainly for external HDDs.
+sudo pmset -a disksleep 5 # Binary toggle, 0 = always on, other positive values = sleeping timeout auto determined. Internal NAND is regulated by the hardware only. 
 sudo pmset -a lessbright 1 # Lets the system auto adjust brightness based on ambient light, power and other factors
 #sudo pmset -a halfdim 1 # Legacy option, may be ignored by modern macos versions
 
 # Master Control:
-sudo pmset -a powermode 0 # Set to automatic for all power sources, intelligent regulation
+sudo pmset -a powermode 0 # Set to automatic for all power sources, intelligent regulation. It prioritizes efficiency, with uncapped safe performance levels. Vs low power mode setting a hard cap, high performance mode leading to reduced efficiency. 
 
 # ==============================================================================
 # Battery Power (BAT): RAM-Only Sleep, Ultra-Delayed Hibernation
