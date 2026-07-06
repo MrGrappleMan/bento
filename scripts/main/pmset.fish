@@ -1,61 +1,67 @@
 #!/usr/bin/env fish
 
 # Power Management
-#
-# Standby
-# As a related concept, standby is a state that occurs after hibernation is triggered, clearing out RAM and preserving disk contents, and killing Power Nap.
-# Standby is intended to work best on mode 3. On mode 0, hibernation is not even triggered. On mode 25, the machine is in a 'standby' like state just after hibernation.
-# Standby closely replicates mode 25 on mode 3, but allows a minor grace period before true power-off is initiated.
-# 
-# Hibernation:
-# All power consumption, data safety and NAND wear is a concern. This topic is highly complex and requires careful consideration.
-# Hibernatemode 0: ( Like s3 with s2idle wakeup speeds )
-# Disable hibernation completely, not recommended for user facing environments
-# RAM only, continues sleep state even when hibernation(thus no standby) is triggered. 
-# For headless environments, it is best to have power nap(in sleep), or WoL or some launchd service that wakes the system up, if you intend to let your clusters sleep.
-# Hibernatemode 3: ( Like hybrid-sleep.target, most modern and graceful mode ) 
-# RAM + Disk, contents are preserved on wakeup, minor power consumption is expected for a short time.
-# Eventually after some time, it enters standby mode.
-# Hibernatemode 25: ( Simple hibernation )
-# Disk only, for maximum battery life, best when the user has been inactive for a long time.
-# This mode makes Power Nap effectively useless after hibernation is triggered, which ideally should be the case.
-# Why keep the RAM contents stranded after hibernation? A 30 second delay post-hibernation wake is worth a few more minutes of true battery life.
+# Intended for balanced system longevity and efficiency, while also allowing maximum safe performance levels.
+# User should use Caffeine to keep important processes running when triggered.
+# https://ss64.com/mac/pmset.html
+# https://www.unix.com/man_page/osx/1/pmset/
 
-# Timeouts:
-# User is heavily recommended to install Caffeine, for uninterrupted activity without continous user interaction being a requirement(compilation, rendering, inference)
-# Use TouchID for convenience or disable lock upon screen sleep
-sudo pmset -a sleep 5 # Sleep after 5 minutes of inactivity (reduce main reason for power consumption)
-sudo pmset -a displaysleep 4 # Turn off display after 4 minutes of inactivity (Reduce burn-in risk, discoloration and power consumption)
-sudo pmset -a disksleep 5 # Binary toggle, 0 = always on, other positive values = sleeping timeout auto determined. Internal NAND is regulated by the hardware only. 
-sudo pmset -a lessbright 1 # Lets the system auto adjust brightness based on ambient light, power and other factors
-#sudo pmset -a halfdim 1 # Legacy option, may be ignored by modern macos versions
+# Source-agnostic settings:
+ # Use TouchID for convenience or disable lock upon screen sleep
 
-# Master Control:
-sudo pmset -a powermode 0 # Set to automatic for all power sources, intelligent regulation. It prioritizes efficiency, with uncapped safe performance levels. Vs low power mode setting a hard cap, high performance mode leading to reduced efficiency. 
+ sudo pmset -a sleep 5 # Sleep after 5 minutes of inactivity ( main reason )
+ sudo pmset -a displaysleep 4 # Turn off display after 4 minutes of inactivity ( Less burn-in, discoloration, power )
 
-# ==============================================================================
-# Battery Power (BAT): RAM-Only Sleep, Ultra-Delayed Hibernation
-# ==============================================================================
-# For battery, we want the system to always keep contents in RAM, and consider hibernating only after battery is like < 10%
-# > (system should wake itself at suitable intervals for battery monitoring and initiating hibernation)
-# - highstandbythreshold 10: Divides battery capacity into "high" (>10%) and "low" (<10%) states.
-# - standbydelayhigh 86400: If battery is > 10%, hibernate after 1 day of sleep.
-# - standbydelaylow 300: If battery is < 10%, hibernate after 5 minutes of sleep.
-#sudo pmset -b highstandbythreshold 10
-#sudo pmset -b standbydelayhigh 86400
-#sudo pmset -b standbydelaylow 300
+  sudo pmset -a powermode 0
+  # Set to auto for all power sources, intelligent regulation.
+  # It prioritizes efficiency, with uncapped safe performance levels.
+  # Low power mode sets a hard cap, high performance mode has reduced efficiency.
 
-# ==============================================================================
-# Uninterruptible Power Supply (UPS): High-Efficiency Safe State
-# ==============================================================================
-# - Treat as reliable but prioritize fast transition to disk to protect against long outages.
-#sudo pmset -u standbydelayhigh 600 # Hibernate after 10 minutes on UPS sleep
+  sudo pmset -a disksleep 10
+  # Disk sleep:
+  # 0: Disks are always on, no sleep.
+  # Any +ve integer: Disk auto sleeps, this value is not of concern, only its presence.
+  # This does not affect the internal NAND's power management
 
-# ==============================================================================
-# Charger / Wall Power (AC): Prevent Unexpected Interruption/Accidental Disconnects
-# ==============================================================================
-# For AC power, we want the system to hibernate, power supply may be unstable or the power cable may be unplugged accidentally.
-# - standbydelayhigh 1200: Move to a deep, safe state after 20 minutes of inactivity.
-#sudo pmset -c standbydelayhigh 1200
-#sudo pmset -c ttyskeepawake 1 # Don't sleep if remote tasks or scripts are running, manually triggering Caffeine is better
-#sudo pmset -c womp 1           # Wake on Magic Packet (useful for remote workflows)
+  sudo pmset -a lessbright 1
+  # System reduces some brightness when switching to X power source
+
+  sudo pmset -a hibernatemode 3
+   # Hibernation:
+    # All power consumption, data integrity, data in RAM security, NAND wear is a concern. This requires careful consideration.
+    # Other hidden modes are not recommended.
+
+    # Hibernatemode 0: ( HB0: Forced s2idle, masked hibernate.target )
+     # RAM only, hibernation triggers are ignored, best with AC
+     # Saves NAND writes but uses more power. Not good for BAT/UPS, loss of data may occur.
+     # For headless AC, use Wake on LAN (WoL) or some launchd service that wakes the system, if saving energy when your clusters sleep.
+
+    # Hibernatemode 3: ( HB3: Like hybrid-sleep.target, graceful )
+     # RAM + Disk, minor power consumption, best with BAT/UPS
+     # True writes to disk are performed after an optimal period post sleep.
+     # Balances power consumption and data safety. Power management is done on a slow-halting spectrum.
+
+    # Hibernatemode 25: ( HB25: Traditional hibernation )
+     # Disk only, RAM contents are discarded immediately after hibernation.
+     # Can be frustrating if you need to wake up quickly from hibernation, else maintains battery well.
+
+ sudo pmset -a standby 1
+ # Allow standby - the action which triggers hibernation, prior to which, sleep is RAM only
+ # Works on HB25, HB3, but not HB0. Entering standby stops power nap functionality.
+
+# Source-specific settings overrides:
+ # Where different settings for each source yields better results.
+
+ # Battery Power (BAT -b):
+  # HB3 is the better choice here
+
+
+
+ # Uninterruptible Power Supply (UPS -u): High-Efficiency Safe State
+  # Objective: Terminal emergency state. Dump to disk and kill power very fast.
+
+
+ # Charger / Wall Power (AC -c)
+  # For charging, HB0 is the default and is perfectly fine, as the battery is a failsafe.
+  # For AC, HB3(like wait 18 hours before power-nap) is better as it saves to disk.
+  # For most people, this doesn't matter, but there may be accidental power cuts. In that case, you should just save your data.

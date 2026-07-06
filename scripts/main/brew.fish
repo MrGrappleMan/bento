@@ -8,4 +8,5 @@ brew analytics on
 
 # Load declarative packages
 ## General
-brew bundle install --file 
+brew bundle install --file main
+
