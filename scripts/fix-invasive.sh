@@ -1,7 +1,5 @@
 
-# This fixes all issues with your Mac, with some
-# significant manual changes that you have made beng disrupted
+# Fixes issues, but also overrides your manually set data
 
-# Delete all .DS_Store files on the system, custom appended info for files will get wiped
-find / -name '.DS_Store' -depth -exec rm {} \;
-
+# Delete all .DS_Store files on user home, custom appended info for files will get wiped
+find ~ -name '.DS_Store' -depth -exec rm {} \;

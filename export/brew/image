@@ -1,6 +1,0 @@
-## Image tools ##
-# For image editing
-
-# Image editing
-    brew "krita"
-    cask "blender"

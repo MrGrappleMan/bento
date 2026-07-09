@@ -1,7 +1,11 @@
 #!/usr/bin/env fish
 
-# Run every subscript in CWD
-for file in *.fish; fish $file; end
+# Run every tweak script
+for file in scripts/tweaks/*.fish; fish $file; end
+
+# Prompt if fixes are needed, and run appropriate script
+
+
 
 # Reboot
 echo "Please enter your user password to reboot and apply changes"

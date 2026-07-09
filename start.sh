@@ -10,6 +10,7 @@ fi
 # Check SIP status and terminate if disabled
 if csrutil status | string match -q "*disabled*"
     echo "SIP is disabled. Please enable it via 'csrutil enable' in Recovery Mode."
+    read -r -p "Press any key to quit..." -n1 -s
     exit 1
 end
 
@@ -29,7 +30,7 @@ brew install fish git
 rm -rf /tmp/bento
 
 # Get the repo
-git clone https://github.com/MrGrappleMan/bento.git
+git clone https://github.com/MrGrappleMan/bento.git /tmp/bento
 
 # Enter repo
 cd /tmp/bento

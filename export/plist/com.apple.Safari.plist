@@ -1,2 +1,0 @@
-defaults write com.apple.Safari HomePage -string "https://scidsg.github.io/relaylove/"
-defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool true
