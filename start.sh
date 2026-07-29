@@ -35,5 +35,11 @@ git clone https://github.com/MrGrappleMan/bento.git /tmp/bento
 # Enter repo
 cd /tmp/bento
 
-# Run main script
-fish main.fish
+# Install Lix
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.lix.systems/lix | sh -s -- install
+
+# Install Nix-Darwin
+sudo nix run nix-darwin/master#darwin-rebuild -- switch
+
+# Install the repo flake
+nix run nix-darwin -- switch --flake github:MrGrappleMan/your-repo#your-hostname

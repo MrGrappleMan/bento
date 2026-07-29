@@ -1,37 +1,44 @@
 { config, pkgs, ... }: {
 
   # =========================================================================
-  # ⚙️ Native nix-darwin Defaults (Cleanly typed & supported options)
+  # ⚙️ System defaults
   # =========================================================================
   system.defaults = {
     
-    # 🖥️ Dock Preferences
+    # 🖥️ Dock Preferences (Only natively supported keys)
     dock = {
       autohide-delay = 0.0;
       autohide-time-modifier = 0.4;
       mineffect = "scale";
       launchanim = false;
-      
-      # Hidden key mappings for native animation performance tuning
       expose-animation-duration = 0.0;
     };
 
-    # 🌐 Global User Domain Preferences (-g / NSGlobalDomain)
+    # 🌐 Global Domain (NSGlobalDomain)
     NSGlobalDomain = {
       NSAutomaticWindowAnimationsEnabled = false;
       NSWindowResizeTime = 0.001;
       NSAutomaticSpellingCorrectionEnabled = false;
       PMPrintingExpandedStateForPrint = true;
       PMPrintingExpandedStateForPrint2 = true;
+      
+      # Font smoothing keys supported directly by NSGlobalDomain.nix
+      AppleFontSmoothing = 3;
+      CGFontRenderingFontSmoothingDisabled = false;
     };
 
     # 📂 Finder Settings
     finder = {
-      # Maps your com.apple.LaunchServices LSQuarantine preference natively
       FXLaunchAlerts = true; 
     };
 
-    # 🔒 Advanced Custom Property Overrides (For unsupported native keys)
+    # 🚀 LaunchServices Settings (From LaunchServices.nix)
+    LaunchServices = {
+      LSQuarantine = true;
+    };
+
+    # 🔒 Custom User Preferences (~/Library/Preferences/)
+    # Used for user domains that lack dedicated nix-darwin module keys
     CustomUserPreferences = {
       "com.apple.Safari" = {
         HomePage = "https://scidsg.github.io/relaylove/";
@@ -47,37 +54,35 @@
         skip-verify-remote = false;
       };
       "com.apple.TextEdit" = {
-        RichText = 0; # Just use Notion, Obsidian, or Zed instead!
+        RichText = 1;
+      };
+      "com.apple.dock" = {
+        springboard-show-duration = 0;
+        springboard-hide-duration = 0;
+      };
+      "bluetoothaudiod" = {
+        "Enable AAC codec" = true;
+        "Enable AptX codec" = true;
+      };
+      "com.apple.appleseed.FeedbackAssistant" = {
+        Autogather = true;
       };
     };
   };
 
   # =========================================================================
-  # 🛠️ System Activation Scripts (For root/sudo & currentHost preferences)
+  # 🛠️ System Activation Scripts (ONLY Root / /Library/Preferences Domains)
   # =========================================================================
   system.activationScripts.postUserActivation.text = ''
-    echo "⚙️ Tweaking advanced root, hardware, and host-specific settings..."
+    echo "⚙️ Tweaking advanced root system preferences..."
 
-    # 🛡️ Application Layer Firewall (ALF) - Needs root emulation context
+    # 🛡️ Application Layer Firewall (ALF) - System level
     sudo defaults write /Library/Preferences/com.apple.alf globalstate -int 1
     sudo defaults write /Library/Preferences/com.apple.alf stealthenabled -int 1
     sudo defaults write /Library/Preferences/com.apple.alf allowsignedenabled -int 1
 
-    # 🎛️ Springboard animation tuning
-    defaults write com.apple.dock springboard-show-duration -int 0
-    defaults write com.apple.dock springboard-hide-duration -int 0
-
-    # 🔤 Font Rendering & Smoothing Adjustments
-    defaults write -g CGFontRenderingFontSmoothingDisabled -bool false
-    defaults write -currentHost -globalDomain AppleFontSmoothing -int 3
-
-    # 📡 Network and Audio Stack Tuning
+    # 📡 Network & System Level Configurations
     sudo defaults write /Library/Preferences/com.apple.mDNSResponder.plist NoMulticastAdvertisements -bool false
-    defaults write bluetoothaudiod "Enable AAC codec" -bool true
-    defaults write bluetoothaudiod "Enable AptX codec" -bool true
-
-    # 📊 Diagnostics and Infrastructure 
-    defaults write com.apple.appleseed.FeedbackAssistant Autogather -bool true
     sudo defaults write /Library/Preferences/com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
     sudo defaults write /Library/Preferences/com.apple.windowserver.plist DisplayResolutionEnabled -bool true
   '';
