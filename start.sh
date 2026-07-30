@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+clear
+
 # Check and terminate if root
 if [ "$EUID" -eq 0 ]; then
     echo "Do not run as root"
@@ -9,7 +11,7 @@ fi
 
 # Check SIP status and terminate if disabled
 if csrutil status | string match -q "*disabled*"
-    echo "SIP is disabled. Please enable it via 'csrutil enable' in Recovery Mode."
+    echo "Enable SIP via 'csrutil enable' in Recovery Mode to proceed."
     read -r -p "Press any key to quit..." -n1 -s
     exit 1
 end
@@ -20,7 +22,7 @@ cd
 # Install Homebrew in non-interactive mode
 NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Refresh shell to be able to recognize homebrew
+# Refresh shell, recognize homebrew
 source ~/.zshrc
 
 # Install Fish shell and Git

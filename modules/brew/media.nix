@@ -1,6 +1,21 @@
-brew "krita"
-cask "blender"
-# CLI
-    brew "ffmpeg"
-# Streaming
-    cask "obs"
+{ config, lib, pkgs, ... }:
+    
+    with lib;
+    
+    {
+      config = {
+        # For networking
+        homebrew = {
+          # Brews
+          brews = [
+            "ffmpeg"
+            "obs"
+            "krita"
+          ];
+          # Casks
+          casks = [
+            "blender"
+          ];
+        };
+      };
+    }

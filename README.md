@@ -11,6 +11,6 @@
 ## ⚙️ Installation
 
 ```zsh
-sudo zsh -c "$(curl -fsSL https://raw.githubusercontent.com/MrGrappleMan/bento/refs/heads/main/)"
+sudo zsh -c "$(curl -fsSL https://raw.githubusercontent.com/MrGrappleMan/bento/refs/heads/main/start.sh)"
 ```
 

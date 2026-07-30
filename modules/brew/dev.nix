@@ -19,7 +19,6 @@ with lib;
         "llvm"
         "gcc"
         "clang"
-        "podman"
         "podman-compose"
         "podman-desktop"
         "kubectl"

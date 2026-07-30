@@ -47,6 +47,7 @@ with lib;
         "fzf"
         "macfuse"
         "ollama"
+        "podman" # For BOINC container management
       ];
       # Casks
       casks = [
@@ -58,6 +59,8 @@ with lib;
         "maintenance"
         "onlyoffice"
         "boinc"
+        "bitchat-tui"
+        "virtualbox" # For BOINC isolated workloads runtime
       ];
     };
   };
