@@ -1,5 +1,6 @@
-#!/usr/bin/env fish
+{ config, pkgs, ... }: {
 
+  system.activationScripts.postUserActivation.text = ''
 # Power Management
 # Intended for balanced system longevity and efficiency, while also allowing maximum safe performance levels.
 # User should use Caffeine to keep important processes running when triggered.
@@ -75,3 +76,6 @@
   # For charging, HB0 is the default and is perfectly fine, as the battery is a failsafe.
   # For AC, HB3(like wait 18 hours before power-nap) is better as it saves to disk.
   # For most people, this doesn't matter, but there may be accidental power cuts. In that case, you should just save your data.
+
+  '';
+}

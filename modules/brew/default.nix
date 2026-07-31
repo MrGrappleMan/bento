@@ -18,6 +18,15 @@ with lib;
     pentest.enable = mkEnableOption "Pentesting tools";
   };
 
+  nix-homebrew = {
+      enable = true;
+      enableRosetta = false; # Ready for Golden Gate
+      # Enable Homebrew analytics - https://docs.brew.sh/Analytics
+      # Saves Time: The team knows exactly which tools to update.
+      # Stops Errors: They can track which tools fail to install and fix them.
+      # Keeps it Safe: The data is anonymous. It only tracks the package name and your command
+      enableAnalytics = true; 
+  };
   config = {
     # Global homebrew config
     homebrew = {
@@ -25,7 +34,7 @@ with lib;
       onActivation = {
         autoUpdate = true;
         upgrade = true;
-        cleanup = "none"; # Let the user manage cleanup, don't let me wipe your configurations upon package removal
+        cleanup = "none"; # Let the user manage cleanup, don't let me wipe your configurations upon package deprecation in here
       };
 
       # General purpose declarations below
