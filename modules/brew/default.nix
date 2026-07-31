@@ -37,17 +37,18 @@ with lib;
         "domt4/autoupdate"
         "homebrew/cask-cask"
         "center2055/onionhop"
+        "teamookla/speedtest"
       ];
       # Brews
       brews = [
         "fish"
-        "speedtest-cli"
         "aria2"
         "zoxide"
         "fzf"
         "macfuse"
         "ollama"
         "podman" # For BOINC container management
+        "mas" # CLI for App Store
       ];
       # Casks
       casks = [
@@ -61,6 +62,11 @@ with lib;
         "boinc"
         "bitchat-tui"
         "virtualbox" # For BOINC isolated workloads runtime
+      ];
+      
+      masApps = [
+        "speedtest-by-ookla" = 1153157709;
+        
       ];
     };
   };

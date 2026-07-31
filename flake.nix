@@ -9,12 +9,12 @@
 
   outputs = { self, nix-darwin, nixpkgs }@inputs: {
     darwinConfigurations = {
-      # 'hostname-here' is matched with your true hostname by nix-darwin, but this is overriden
-      "hostname-here" = nix-darwin.lib.darwinSystem {
+      # Matches 'defaulthost' as used in: github:MrGrappleMan/bento#defaulthost, bypassing the need for a separate hostname
+      "defaulthost" = nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
         modules = [
-          ./modules/core/system.nix
-          ./modules/background-sync.nix
-          ./modules/brew
+          ./modules/plist # Loads modules/plist/default.nix (system defaults & launchd background sync)
+          ./modules/brew  # Loads modules/brew/default.nix (Homebrew baseline & profile toggles)
         ];
       };
     };

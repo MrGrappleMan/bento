@@ -13,8 +13,7 @@
       ShowAMPM = true;
       ShowDayOfMonth = true;
       ShowDayOfWeek = true;
-      ShowSeconds = false; # may drain battery faster
-      
+      ShowSeconds = false; # enabling may drain battery faster
     };
     
     # 🖥️ Dock Preferences (Only natively supported keys)
@@ -131,10 +130,16 @@
         springboard-show-duration = 0;
         springboard-hide-duration = 0;
       };
+
+      "com.apple.iokit.AmbientLightSensor" = {
+        "Automatic Display Enabled" = true;
+      };
+      
       "bluetoothaudiod" = {
         "Enable AAC codec" = true;
         "Enable AptX codec" = true;
       };
+      
       "com.apple.appleseed.FeedbackAssistant" = {
         Autogather = true;
       };

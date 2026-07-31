@@ -17,6 +17,7 @@ with lib;
         "tor"
         "snowflake"
         "onionhop"
+        "speedtest-cli"
       ];
       # Casks
       casks = [

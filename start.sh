@@ -1,47 +1,67 @@
 #!/usr/bin/env zsh
 
+set -e # Exit immediately if a command exits with a non-zero status
+
 clear
 
-# Check and terminate if root
+# 1. Check and terminate if root
 if [ "$EUID" -eq 0 ]; then
-    echo "Do not run as root"
+    clear
+    echo "Do not run this script directly as root or via sudo."
+    echo "There are some user-specific settings that need to be applied as a regular user."
     read -r -p "Press any key to quit..." -n1 -s
     exit 1
 fi
 
-# Check SIP status and terminate if disabled
-if csrutil status | string match -q "*disabled*"
-    echo "Enable SIP via 'csrutil enable' in Recovery Mode to proceed."
+# 2. Check SIP status using native Zsh syntax
+if csrutil status | grep -q "disabled"; then
+    clear
+    echo "Error: System Integrity Protection (SIP) is disabled."
+    echo "To enable SIP, follow the automatically opened video guide or the text below."
+    echo
+    echo "How to enable SIP:"
+    echo
+    echo "Enter Recovery Mode: Shut down your Mac, then press and hold the power button until the text, \"Loading startup options\" appears."
+    echo "Access Terminal: Select Options > Continue, log in, and then navigate to Utilities > Terminal."
+    echo "Reset CSRutil: Type sudo csrutil reset, press Return, type Y to confirm, and enter your administrator password."
+    echo "Restart: Once the process completes, restart the machine for the changes to take effect."
+    echo "Verification: Log back in and run csrutil status in Terminal again to ensure SIP is enabled."
+    open https://www.youtube.com/watch?v=Fx_1OPFzu88&t=29s
     read -r -p "Press any key to quit..." -n1 -s
     exit 1
-end
+fi
 
-# Go to home directory
-cd
+cd "$HOME"
 
-# Install Homebrew in non-interactive mode
-NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# 3. Install Homebrew (Non-Interactive)
+if ! command -v brew >/dev/null 2>&1; then
+    echo "🍺 Installing Homebrew..."
+    NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    
+    # Load Homebrew into current shell environment
+    if [ -f "/opt/homebrew/bin/brew" ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
+fi
 
-# Refresh shell, recognize homebrew
-source ~/.zshrc
+# 4. Install Git & Fish
+echo "📦 Installing Git and Fish via Brew..."
+brew install git fish
 
-# Install Fish shell and Git
-brew install fish git
+# 5. Install Lix
+if ! command -v nix >/dev/null 2>&1; then
+    echo "❄️ Installing Lix package manager..."
+    curl --proto '=https' --tlsv1.2 -sSf -L https://install.lix.systems/lix | sh -s -- install --no-confirm
 
-# Remove existing repo files, if any
-rm -rf /tmp/bento
+    # Source Nix/Lix daemon into the current running script context
+    if [ -f "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
+        . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+    fi
+fi
 
-# Get the repo
-git clone https://github.com/MrGrappleMan/bento.git /tmp/bento
+# 6. Apply flake remotely
+echo "🚀 Applying Bento nix-darwin configuration..."
+nix run nix-darwin -- switch --flake github:MrGrappleMan/bento#defaulthost --extra-experimental-features "nix-command flakes" --no-write-lock-file --refresh
 
-# Enter repo
-cd /tmp/bento
-
-# Install Lix
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.lix.systems/lix | sh -s -- install
-
-# Install Nix-Darwin
-sudo nix run nix-darwin/master#darwin-rebuild -- switch
-
-# Install the repo flake
-nix run nix-darwin -- switch --flake github:MrGrappleMan/your-repo#your-hostname
+# 7. Reboot
+sudo shutdown -r now
