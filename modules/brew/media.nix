@@ -4,15 +4,12 @@
     
     {
       config = {
-        # For networking
         homebrew = {
-          # Brews
           brews = [
             "ffmpeg"
             "obs"
             "krita"
           ];
-          # Casks
           casks = [
             "blender"
           ];

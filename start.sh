@@ -1,8 +1,13 @@
 #!/usr/bin/env zsh
-
-set -e # Exit immediately if a command exits with a non-zero status
-
+# set -e # Exit immediately if a command exits with a non-zero status
 clear
+
+# User reminder
+
+if [[ $(uname) != "Darwin" ]]; then
+    echo "Environment is not macOS, try re-sshing into your macOS machine."
+    exit 1
+fi
 
 # 1. Check and terminate if root
 if [ "$EUID" -eq 0 ]; then
@@ -26,9 +31,22 @@ if csrutil status | grep -q "disabled"; then
     echo "Reset CSRutil: Type sudo csrutil reset, press Return, type Y to confirm, and enter your administrator password."
     echo "Restart: Once the process completes, restart the machine for the changes to take effect."
     echo "Verification: Log back in and run csrutil status in Terminal again to ensure SIP is enabled."
+    echo
     open https://www.youtube.com/watch?v=Fx_1OPFzu88&t=29s
     read -r -p "Press any key to quit..." -n1 -s
     exit 1
+fi
+
+echo "Please quit all applications and save your work before continuing."
+echo "Your device will automatically reboot."
+echo -n "Continue? (y/N): "
+read -k 1 -t 5 reply
+echo ""
+if [[ "$reply" == "y" || "$reply" == "Y" ]]; then
+    echo "Starting..."
+else
+    echo "Exiting."
+    exit 0
 fi
 
 cd "$HOME"
@@ -38,17 +56,11 @@ if ! command -v brew >/dev/null 2>&1; then
     echo "🍺 Installing Homebrew..."
     NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     
-    # Load Homebrew into current shell environment
-    if [ -f "/opt/homebrew/bin/brew" ]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-    fi
+    # Load Homebrew into zsh
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# 4. Install Git & Fish
-echo "📦 Installing Git and Fish via Brew..."
-brew install git fish
-
-# 5. Install Lix
+# 4. Install Lix
 if ! command -v nix >/dev/null 2>&1; then
     echo "❄️ Installing Lix package manager..."
     curl --proto '=https' --tlsv1.2 -sSf -L https://install.lix.systems/lix | sh -s -- install --no-confirm
@@ -59,9 +71,9 @@ if ! command -v nix >/dev/null 2>&1; then
     fi
 fi
 
-# 6. Apply flake remotely
-echo "🚀 Applying Bento nix-darwin configuration..."
+# 5. Apply flake remotely
+echo "🚀 Applying the configuration..."
 nix run nix-darwin -- switch --flake github:MrGrappleMan/bento#defaulthost --extra-experimental-features "nix-command flakes" --no-write-lock-file --refresh
 
-# 7. Reboot
+# 6. Reboot
 sudo shutdown -r now

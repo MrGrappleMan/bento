@@ -9,7 +9,7 @@ with lib;
     ./networking.nix
     ./pentest.nix
   ];
-
+  
   # Allow modular installation of package groups
   options.bento.profiles = {
     dev.enable = mkEnableOption "Software Development tools";
@@ -17,29 +17,27 @@ with lib;
     networking.enable = mkEnableOption "Networking & Diagnostic tools";
     pentest.enable = mkEnableOption "Pentesting tools";
   };
-
-  nix-homebrew = {
+  
+  config = {
+    nix-homebrew = {
       enable = true;
       enableRosetta = false; # Ready for Golden Gate
       # Enable Homebrew analytics - https://docs.brew.sh/Analytics
-      # Saves Time: The team knows exactly which tools to update.
+      # Saves Time: The devs know exactly which tools to update.
       # Stops Errors: They can track which tools fail to install and fix them.
-      # Keeps it Safe: The data is anonymous. It only tracks the package name and your command
+      # Relevant data only: Tracks installed formulae, casks, and build errors, not personal data.
       enableAnalytics = true; 
-  };
-  config = {
+    };
     # Global homebrew config
     homebrew = {
-      enable = true;
-      onActivation = {
-        autoUpdate = true;
-        upgrade = true;
-        cleanup = "none"; # Let the user manage cleanup, don't let me wipe your configurations upon package deprecation in here
+        enable = true;
+        onActivation = {
+          autoUpdate = true;
+          upgrade = true;
+          cleanup = "none"; # Let the user manage cleanup, don't let me wipe your configurations upon package deprecation in here
       };
-
-      # General purpose declarations below
       
-      # Repositories / Taps
+      # Repositories / Taps - get all for convenience
       taps = [
         "pol-rivero/tap"
         "glzr-io/tap"
@@ -48,7 +46,7 @@ with lib;
         "center2055/onionhop"
         "teamookla/speedtest"
       ];
-      # Brews
+      
       brews = [
         "fish"
         "aria2"
@@ -58,8 +56,9 @@ with lib;
         "ollama"
         "podman" # For BOINC container management
         "mas" # CLI for App Store
+        "defaultbrowser" # Set default browser utility
       ];
-      # Casks
+      
       casks = [
         "utm"
         "localsend"
@@ -74,8 +73,7 @@ with lib;
       ];
       
       masApps = [
-        "speedtest-by-ookla" = 1153157709;
-        
+        "speedtest-by-ookla" = 1153157709; 
       ];
     };
   };

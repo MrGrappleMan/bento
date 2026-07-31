@@ -4,9 +4,7 @@ with lib;
 
 {
   config = {
-    # For networking
     homebrew = {
-      # Brews
       brews = [
         "nmap"
         "wireshark"
@@ -19,7 +17,6 @@ with lib;
         "onionhop"
         "speedtest-cli"
       ];
-      # Casks
       casks = [
         "tor-browser@alpha"
         "moonlight"

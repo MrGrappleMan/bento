@@ -1,20 +1,23 @@
 { config, pkgs, ... }:
 
+# Guide sheet for system-d users
+
+
 {
-  # Manage the user-level LaunchAgent
+  # User-level services
   launchd.user.agents."com.apple.ReportCrash" = {
     overrideCmdPort = true;
     config = {
-      Disabled = false; # Set to true if your goal was to disable it
+      Disabled = false; 
       RunAtLoad = true;
     };
   };
 
-  # Manage the system-level LaunchDaemon
+  # System-level services
   launchd.daemons."com.apple.ReportCrash.Root" = {
     overrideCmdPort = true;
     config = {
-      Disabled = false; # Set to true if your goal was to disable it
+      Disabled = false;
       RunAtLoad = true;
     };
   };

@@ -4,9 +4,7 @@ with lib;
 
 {
   config = {
-    # For software development
     homebrew = {
-      # Brews
       brews = [
         "git"
         "git-lfs"
@@ -23,7 +21,6 @@ with lib;
         "podman-desktop"
         "kubectl"
       ];
-      # Casks
       casks = [
         "github-desktop-plus"
         "zed"

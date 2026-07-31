@@ -2,15 +2,26 @@
   description = "Bento - the productivity suite for MacOS";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nix-darwin.url = "github:LnL7/nix-darwin";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    nixpkgs = { 
+      url = "github:nixos/nixpkgs/nixpkgs-unstable"; 
+    };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-homebrew = {
+      url = "github:zhaofengli-wip/nix-homebrew";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nix-darwin, nixpkgs }@inputs: {
     darwinConfigurations = {
-      # Matches 'defaulthost' as used in: github:MrGrappleMan/bento#defaulthost, bypassing the need for a separate hostname
+      # Matches 'defaulthost' as used in: github:MrGrappleMan/bento#defaulthost, bypassing the need for a separate hostname and editing this
       "defaulthost" = nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [

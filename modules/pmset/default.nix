@@ -47,14 +47,11 @@
      # Hibernatemode 25: ( HB25: Traditional hibernation )
       # Disk only, RAM contents are discarded immediately after hibernation.
       # Can be frustrating if you need to wake up quickly from hibernation, else maintains battery well.
+      
   sudo pmset -a powermode 0
-  # Set to auto for all power sources, intelligent regulation.
-  # It prioritizes efficiency, with uncapped safe performance levels.
-  # Low power mode sets a hard cap, high performance mode has reduced efficiency.
-
-
-  sudo pmset -a lessbright 1
-  # System reduces some brightness when switching to X power source
+    # Set to auto for all power sources, intelligent regulation.
+    # It prioritizes efficiency, with uncapped safe performance levels.
+    # Low power mode sets a hard cap, high performance mode has reduced efficiency.
 
  sudo pmset -a standby 1
  # Allow standby - the action which triggers hibernation, prior to which, sleep is RAM only
@@ -63,18 +60,18 @@
 # Source-specific settings overrides:
  # Where different settings for each source yields better results.
 
- # Battery Power (BAT -b):
+ # Battery Power (BAT -b)
   # HB3 is the better choice here
+  sudo pmset -b lessbright 1
+    # System reduces some brightness when switching to X power source
 
 
-
- # Uninterruptible Power Supply (UPS -u): High-Efficiency Safe State
-  # Objective: Terminal emergency state. Dump to disk and kill power very fast.
-
+ # Uninterruptible Power Supply (UPS -u)
+  # Objective: Terminal emergency state. Dump to disk and kill power fast when inactive
 
  # Charger / Wall Power (AC -c)
   # For charging, HB0 is the default and is perfectly fine, as the battery is a failsafe.
-  # For AC, HB3(like wait 18 hours before power-nap) is better as it saves to disk.
+  # For AC, HB3(like wait 18 hours before hibernation) is better as it saves to disk.
   # For most people, this doesn't matter, but there may be accidental power cuts. In that case, you should just save your data.
 
   '';

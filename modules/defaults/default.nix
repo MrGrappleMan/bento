@@ -130,39 +130,30 @@
         springboard-show-duration = 0;
         springboard-hide-duration = 0;
       };
-
       "com.apple.iokit.AmbientLightSensor" = {
         "Automatic Display Enabled" = true;
       };
-      
       "bluetoothaudiod" = {
         "Enable AAC codec" = true;
         "Enable AptX codec" = true;
       };
-      
       "com.apple.appleseed.FeedbackAssistant" = {
         Autogather = true;
       };
-
       com.apple.alf = {
         globalstate = 1;
         stealthenabled = 1;
         allowsignedenabled = 1;
       };
-
       com.apple.mDNSResponder = {
         NoMulticastAdvertisements = false;
       };
-
       com.apple.TimeMachine = {
         DoNotOfferNewDisksForBackup = true;
       };
-
       com.apple.windowserver = {
         DisplayResolutionEnabled = true;
       };
-      
     };
   };
-
 }
