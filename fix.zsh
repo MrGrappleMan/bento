@@ -34,6 +34,8 @@ echo ""
 if [[ "$reply" == "y" || "$reply" == "Y" ]]; then
   find ~ -name '.DS_Store' -depth -exec rm {} \; 2>/dev/null || true
   echo "✅ Wiped .DS_Store metadata!"
+else
+  echo "🛑 Cancelled or timeout reached"
 fi
 
 exit 0
