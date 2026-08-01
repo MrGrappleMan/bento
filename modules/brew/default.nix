@@ -44,6 +44,7 @@ with lib;
         "domt4/autoupdate"
         "homebrew/cask-cask"
         "center2055/onionhop"
+        "vaibhav-mattoo/bitchat-tui"
         "teamookla/speedtest"
       ];
       
