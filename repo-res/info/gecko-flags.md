@@ -1,3 +1,5 @@
+# Put these in about:config
+
 | Flag | Type | Value |
 | --- | --- | --- |
 | dom.event.clipboardevents.enabled | B   | 1   |

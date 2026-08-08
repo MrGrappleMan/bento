@@ -1,4 +1,4 @@
-Enable these in chrome://flags
+# Enable these in chrome://flags
 
 | Flag Name | URL | Description |
 |:---:|:---:|:---:|
@@ -13,4 +13,4 @@ Enable these in chrome://flags
 | Video Encoding | chrome://flags/#disable-accelerated-video-decode |  |
 | Video Decoding | chrome://flags/#disable-accelerated-video-encode |  |
 | Better Scrollbars | chrome://flags/#fluent-scrollbars |  |
-| Multi-Channel Downloading | chrome://flags/#enable-parallel-downloading | Speed up downloads with mutliple connections. FDM is still faster |
+| Multi-Channel Downloading | chrome://flags/#enable-parallel-downloading | Speed up downloads with multiple connections. Gopeed is still faster |
