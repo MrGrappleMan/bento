@@ -1,0 +1,14 @@
+[Unit]
+Description=🔄️ Get BootC updates
+Documentation=https://bootc-dev.github.io/
+ConditionPathExists=/run/ostree-booted
+Wants=network-online.target
+After=network-online.target
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+AccuracySec=1h
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,15 @@
+[Unit]
+Description=💽 Discard unused filesystem blocks to help storage efficiency and longevity
+Documentation=man:fstrim
+ConditionVirtualization=!container
+ConditionPathExists=!/etc/initrd-release
+
+# discard=async is recommended for modern NVMe drives.
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+AccuracySec=1h
+
+[Install]
+WantedBy=timers.target

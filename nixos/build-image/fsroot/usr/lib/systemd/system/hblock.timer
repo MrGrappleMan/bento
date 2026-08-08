@@ -1,0 +1,12 @@
+[Unit]
+Description=hBlock - /etc/hosts based content blocker
+After=network-online.target
+Wants=network-online.target
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+AccuracySec=1h
+
+[Install]
+WantedBy=timers.target
