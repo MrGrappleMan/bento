@@ -26,11 +26,11 @@
         modules = [
           nix-homebrew.darwinModules.nix-homebrew
           home-manager.darwinModules.home-manager
-          ./modules/brew
-          ./modules/defaults
-          ./modules/launchctl
-          ./modules/misc
-          ./modules/pmset
+          ./darwin/brew
+          ./darwin/defaults
+          ./darwin/launchctl
+          ./darwin/misc
+          ./darwin/pmset
         ];
       };
     };
