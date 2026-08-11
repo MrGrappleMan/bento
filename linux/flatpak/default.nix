@@ -91,6 +91,6 @@ in {
       alias fpkr0 "flatpak --system remote-delete --force"
       alias fpkp1 "flatpak --system install -y --noninteractive --or-update"
       alias fpkp0 "flatpak --system uninstall -y --noninteractive"
-    '';
-  };
+    ''
+  }
 }

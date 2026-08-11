@@ -94,7 +94,7 @@ echo "🚀 Deploying target attribute: github:MrGrappleMan/bento#$target_attribu
 echo "------------------------------------------------------------------------------"
 
 if test "$ostype" = "nx"
-    sudo nixos-rebuild switch \
+    sudo nixos-rebuild boot \
         --flake "github:MrGrappleMan/bento#$target_attribute" \
         --extra-experimental-features "nix-command flakes" \
         --no-write-lock-file \
