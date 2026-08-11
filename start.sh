@@ -1,78 +1,108 @@
-#!/usr/bin/env zsh
-# set -e # Exit immediately if a command exits with a non-zero status
-clear
+#!/usr/bin/env fish
+#
+# ------------------------------------------------------------------------------
+# ⚙️ Step 1: OS Verification & System Checks
+# ------------------------------------------------------------------------------
+set -l sys_name (uname -s)
+set -l ostype ""
 
-# Fail if not MacOS
-if [[ $(uname) != "Darwin" ]]; then
-    echo "Environment is not macOS, try re-sshing into your macOS machine."
-    exit 1
-fi
+switch $sys_name
+    case Darwin
+        # 🔍 Nix presence check
+        if not command -v nix >/dev/null 2>&1
+            echo "❌ Error: Nix is not installed or not in PATH."
+            exit 1
+        end
 
-# Fail if root
-if [ "$EUID" -eq 0 ]; then
-    clear
-    echo "Do not run this script directly as root or via sudo."
-    echo "There are some user-specific settings that need to be applied as a regular user."
-    read -r -p "Press any key to quit..." -n1 -s
-    exit 1
-fi
+        # 🔍 SIP status check
+        if command -v csrutil >/dev/null 2>&1
+            set -l sip_status (csrutil status)
+            echo "ℹ️ macOS SIP Status: $sip_status"
+        else
+            echo "⚠️ Warning: Unable to verify SIP status via csrutil." [⚠️toVerify]
+        end
 
-# Fail if SIP is disabled
-if csrutil status | grep -q "disabled"; then
-    clear
-    echo "Error: System Integrity Protection (SIP) is disabled."
-    echo "To enable SIP, follow the automatically opened video guide or the text below."
-    echo
-    echo "How to enable SIP:"
-    echo
-    echo "Enter Recovery Mode: Shut down your Mac, then press and hold the power button until the text, \"Loading startup options\" appears."
-    echo "Access Terminal: Select Options > Continue, log in, and then navigate to Utilities > Terminal."
-    echo "Reset CSRutil: Type \"sudo csrutil reset\", press Return, type Y to confirm, and enter your administrator password."
-    echo "Restart: Once the process completes, restart the machine for the changes to take effect."
-    echo "Verification: Log back in and run \"csrutil status\" in Terminal again to ensure SIP is enabled."
-    echo
-    open https://www.youtube.com/watch?v=Fx_1OPFzu88&t=29s
-    read -r -p "Press any key to quit..." -n1 -s
-    exit 1
-fi
+        set ostype "dw"
 
-echo "Please quit all applications and save your work before continuing."
-echo "Your device will automatically reboot."
-echo -n "Continue? (y/N): "
-read -k 1 -t 5 reply
+    case Linux
+        # 🔍 Verify system is NixOS
+        if not test -e /etc/NIXOS
+            echo "❌ Error: Host operating system is not NixOS (/etc/NIXOS missing)."
+            exit 1
+        end
+
+        # 🔍 Nix presence check
+        if not command -v nix >/dev/null 2>&1
+            echo "❌ Error: Nix is not installed or not in PATH."
+            exit 1
+        end
+
+        set ostype "nx"
+
+    case '*'
+        echo "❌ Error: Unsupported operating system ($sys_name)."
+        exit 1
+end
+
+echo "✅ OS Check Passed: ostype = $ostype"
+
+# ------------------------------------------------------------------------------
+# 🎯 Step 2: Target Environment Selection
+# ------------------------------------------------------------------------------
 echo ""
-if [[ "$reply" == "y" || "$reply" == "Y" ]]; then
-    echo "Starting..."
-else
-    echo "Exiting."
-    exit 0
-fi
+echo "Select Target Environment Type:"
+echo "  • dsk : Desktop / Workstation (Default)"
+echo "  • srv : Headless Server Engine"
 
-cd "$HOME"
+read -P "Target environment type? [dsk/srv] (default: dsk): " -l env_input
 
-# Install Homebrew if not found (Non-Interactive)
-if ! command -v brew >/dev/null 2>&1; then
-    echo "🍺 Installing Homebrew..."
-    NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    
-    # Load Homebrew into zsh
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
+set -l usecase ""
+switch "$env_input"
+    case "srv" "server" "2"
+        set usecase "srv"
+    case "*"
+        set usecase "dsk"
+end
 
-# Install Lix
-if ! command -v nix >/dev/null 2>&1; then
-    echo "❄️ Installing Lix package manager..."
-    curl --proto '=https' --tlsv1.2 -sSf -L https://install.lix.systems/lix | sh -s -- install --no-confirm
+echo "✅ Target Environment Selected: $usecase"
 
-    # Source Nix/Lix daemon into the current running script context
-    if [ -f "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
-        . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
-    fi
-fi
+# ------------------------------------------------------------------------------
+# 🧬 Step 3: Automatic Architecture Derivation
+# ------------------------------------------------------------------------------
+set -l raw_arch (uname -m)
+set -l arch ""
 
-# Apply flake from repo directly, use up to date files
-echo "🚀 Applying the configuration..."
-nix run nix-darwin -- switch --flake github:MrGrappleMan/bento#defaulthost --extra-experimental-features "nix-command flakes" --no-write-lock-file --refresh
+switch $raw_arch
+    case x86_64
+        set arch "x86"
+    case arm64 aarch64
+        set arch "arm"
+    case '*'
+        echo "❌ Error: Unsupported architecture ($raw_arch). Must be x86_64 or arm64/aarch64."
+        exit 1
+end
 
-# Reboot
-sudo shutdown -r now
+echo "✅ Architecture Derived: $arch (from $raw_arch)"
+
+# ------------------------------------------------------------------------------
+# 🚀 Step 4: Dynamic Rebuild Phase
+# ------------------------------------------------------------------------------
+set -l target_attribute "$ostype-$usecase-$arch"
+
+echo ""
+echo "🚀 Deploying target attribute: github:MrGrappleMan/bento#$target_attribute"
+echo "------------------------------------------------------------------------------"
+
+if test "$ostype" = "nx"
+    sudo nixos-rebuild switch \
+        --flake "github:MrGrappleMan/bento#$target_attribute" \
+        --extra-experimental-features "nix-command flakes" \
+        --no-write-lock-file \
+        --refresh
+else if test "$ostype" = "dw"
+    darwin-rebuild switch \
+        --flake "github:MrGrappleMan/bento#$target_attribute" \
+        --extra-experimental-features "nix-command flakes" \
+        --no-write-lock-file \
+        --refresh
+end

@@ -1,10 +1,10 @@
 {
+
   description = "Bento - the productivity suite for NixOS / MacOS";
 
   inputs = {
-    nixpkgs = {
-      url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    };
+    nixai.url = "github:olafkfreund/nix-ai-help";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nix-cachyos-kernel = {
       url = "github:xddxdd/nix-cachyos-kernel/release";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -13,27 +13,24 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-homebrew = {
-      url = "github:zhaofengli-wip/nix-homebrew";
-    };
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-hardware = {
-      url = "github:nixos/nixos-hardware";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixos-hardware.url = "github:nixos/nixos-hardware";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, nix-cachyos-kernel, nix-darwin, nix-homebrew, home-manager, nixos-hardware, flake-parts }@inputs: {
+  outputs = { self, nixpkgs, nix-cachyos-kernel, nix-darwin, nix-homebrew, home-manager, nixos-hardware, flake-parts, ... }@inputs: {
+
+    # MacOS, x86 support is not supported
     darwinConfigurations = {
-      # Matches 'defaulthost' as used in: github:MrGrappleMan/bento#defaulthost, bypassing the need for a separate hostname and editing this
-      "defaulthost" = nix-darwin.lib.darwinSystem {
+      # Desktop aarch64
+      "dw-dsk-arm" = nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
           nix-homebrew.darwinModules.nix-homebrew
@@ -45,7 +42,51 @@
           ./darwin/pmset
         ];
       };
+      # Server aarch64
+      "dw-srv-arm" = nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        modules = [
+          #planned later
+        ];
+      };
+    };
 
+    # NixOS
+    nixosConfigurations = {
+      # Desktop aarch64
+      "nx-dsk-arm" = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
+        modules = [
+          home-manager.nixosModules.home-manager
+          #planned later
+        ];
+      };
+      # Server aarch64
+      "nx-srv-arm" = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
+        modules = [
+          home-manager.nixosModules.home-manager
+          #planned later
+        ];
+      };
+      # Desktop x86_64
+      "nx-dsk-x86" = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          home-manager.nixosModules.home-manager
+          ./linux/flatpak
+          ./linux/systemd
+          ./linux/pkgs
+        ];
+      };
+      # Server x86_64
+      "nx-srv-x86" = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          home-manager.nixosModules.home-manager
+          #Planned later
+        ];
+      };
     };
   };
 }
