@@ -3,7 +3,6 @@
   description = "Bento - the productivity suite for NixOS / MacOS";
 
   inputs = {
-  ./hardware-configuration.nix
     nixai.url = "github:olafkfreund/nix-ai-help";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nix-cachyos-kernel = {
@@ -36,6 +35,7 @@
         modules = [
           nix-homebrew.darwinModules.nix-homebrew
           home-manager.darwinModules.home-manager
+          /etc/nixos/hardware-configuration.nix
           ./darwin/brew
           ./darwin/defaults
           ./darwin/launchctl
