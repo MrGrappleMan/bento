@@ -175,14 +175,14 @@ echo "--------------------------------------------------------------------------
 if [ "$ostype" = "nx" ]; then
     sudo nixos-rebuild boot \
         --flake "$repo_dir#$target_attribute" \
-        --extra-experimental-features "nix-command flakes" \
+        --option extra-experimental-features "nix-command flakes" \
         --no-write-lock-file \
         --refresh
 else
     if [ "$ostype" = "dw" ]; then
         darwin-rebuild switch \
             --flake "$repo_dir#$target_attribute" \
-            --extra-experimental-features "nix-command flakes" \
+            --option extra-experimental-features "nix-command flakes" \
             --no-write-lock-file \
             --refresh
     fi
