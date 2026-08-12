@@ -75,6 +75,7 @@
         system = "x86_64-linux";
         modules = [
           home-manager.nixosModules.home-manager
+          /etc/nixos/hardware-configuration.nix
           ./linux/boot
           ./linux/flatpak
           ./linux/pkgs
