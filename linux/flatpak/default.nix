@@ -27,7 +27,7 @@
     ];
 
     # 📦 Packages
-    packages = [
+    package = [
       # Vulkan / Gaming Backend Extension Matrix
       "flathub:org.freedesktop.Platform.VulkanLayer.lsfgvk//25.08"
       "flathub:org.freedesktop.Platform.VulkanLayer.lsfgvk//24.08"
