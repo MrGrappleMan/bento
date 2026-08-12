@@ -11,5 +11,5 @@ Simply run the following command to install, you may need to enter your password
 a few times.
 
 ```bash
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/MrGrappleMan/bento/refs/heads/main/start.sh)"
+sudo bash -c "$(curl -fsSL -H "Cache-Control: no-cache" https://raw.githubusercontent.com/MrGrappleMan/bento/refs/heads/main/start.sh)"
 ```

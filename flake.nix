@@ -19,13 +19,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:nixos/nixos-hardware";
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, nix-cachyos-kernel, nix-darwin, nix-homebrew, home-manager, nixos-hardware, flake-parts, ... }@inputs: {
+  outputs = { self, nixpkgs, nix-cachyos-kernel, nix-darwin, nix-homebrew, home-manager, nixos-hardware, nix-flatpak, flake-parts, ... }@inputs: {
 
     # MacOS, x86 support is not supported
     darwinConfigurations = {
@@ -74,6 +75,7 @@
         system = "x86_64-linux";
         modules = [
           home-manager.nixosModules.home-manager
+          inputs.nix-flatpak.nixosModules.nix-flatpak
           ./linux/hardware-configuration.nix
           ./linux/boot
           ./linux/flatpak
