@@ -10,6 +10,6 @@ A NixOS / MacOS configuration repository for performance and productivity.
 Simply run the following command to install, you may need to enter your password
 a few times.
 
-```zsh
-sudo zsh -c "$(curl -fsSL https://raw.githubusercontent.com/MrGrappleMan/bento/refs/heads/main/start.sh)"
+```bash
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/MrGrappleMan/bento/refs/heads/main/start.sh)"
 ```
