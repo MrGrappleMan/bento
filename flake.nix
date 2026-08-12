@@ -35,7 +35,6 @@
         modules = [
           nix-homebrew.darwinModules.nix-homebrew
           home-manager.darwinModules.home-manager
-          /etc/nixos/hardware-configuration.nix
           ./darwin/brew
           ./darwin/defaults
           ./darwin/launchctl
@@ -75,7 +74,7 @@
         system = "x86_64-linux";
         modules = [
           home-manager.nixosModules.home-manager
-          /etc/nixos/hardware-configuration.nix
+          ./linux/hardware-configuration.nix
           ./linux/boot
           ./linux/flatpak
           ./linux/pkgs
