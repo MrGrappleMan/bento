@@ -3,6 +3,7 @@
   description = "Bento - the productivity suite for NixOS / MacOS";
 
   inputs = {
+  ./hardware-configuration.nix
     nixai.url = "github:olafkfreund/nix-ai-help";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nix-cachyos-kernel = {
@@ -74,9 +75,11 @@
         system = "x86_64-linux";
         modules = [
           home-manager.nixosModules.home-manager
+          ./linux/boot
           ./linux/flatpak
           ./linux/pkgs
           ./linux/systemd
+          ./linux/xdg
         ];
       };
       # Server x86_64
