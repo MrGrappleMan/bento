@@ -75,8 +75,8 @@
         modules = [
           home-manager.nixosModules.home-manager
           ./linux/flatpak
-          ./linux/systemd
           ./linux/pkgs
+          ./linux/systemd
         ];
       };
       # Server x86_64

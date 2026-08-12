@@ -4,17 +4,9 @@
 # ==============================================================================
 { config, lib, pkgs, ... }:
 
-let
-  cfg = config.satellites.systemd-core;
-in {
-  options.satellites.systemd-core = {
-    enable = lib.mkEnableOption "Declarative systemd baseline service topology";
-  };
-
-  config = lib.mkIf cfg.enable {
-    # 🫥 Systemd Target Mask Invariants (Replaces 'systemctl mask')
-    # Nix isolates these profiles by explicitly routing their configurations to /dev/null
-    systemd.maskedServices = [
+{
+  systemd = {
+    maskedServices = [
       "power-profiles-daemon"
       "tlp"
       "tlp-pd"
@@ -23,8 +15,7 @@ in {
     ];
 
     # 🟢 Active Systemd Workloads (Replaces 'sysdOn' / 'sysdOff' parameters)
-    # If a service name here is missing its source package, the build fails instantly at evaluation.
-    systemd.services = {
+    services = {
       # Explicitly disables GDM from matching structural runtime generation hooks
       gdm.wantedBy = lib.mkForce [ ];
 
@@ -53,8 +44,8 @@ in {
       "beesd@var-home".wantedBy = [ "multi-user.target" ];
     };
 
-    # ⏱️ Systemd Maintenance Timers Ledger
-    systemd.timers = {
+    # ⏱️ TImers
+    timers = {
       podman-auto-update.wantedBy = [ "timers.target" ];
       uupd.wantedBy = [ "timers.target" ];
       bootc-fetch-apply-updates.wantedBy = [ "timers.target" ];
@@ -62,8 +53,8 @@ in {
       hblock.wantedBy = [ "timers.target" ];
     };
 
-    # 🔌 Systemd Socket Allocations
-    systemd.sockets = {
+    # 🔌 Sockets
+    sockets = {
       podman.wantedBy = [ "sockets.target" ];
       libvirtd.wantedBy = [ "sockets.target" ];
       systemd-rfkill.wantedBy = [ "sockets.target" ];

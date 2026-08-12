@@ -93,16 +93,19 @@ echo ""
 echo "🚀 Deploying target attribute: github:MrGrappleMan/bento#$target_attribute"
 echo "------------------------------------------------------------------------------"
 
+# Require rebooting on NixOS
 if test "$ostype" = "nx"
     sudo nixos-rebuild boot \
         --flake "github:MrGrappleMan/bento#$target_attribute" \
         --extra-experimental-features "nix-command flakes" \
         --no-write-lock-file \
         --refresh
-else if test "$ostype" = "dw"
-    darwin-rebuild switch \
-        --flake "github:MrGrappleMan/bento#$target_attribute" \
-        --extra-experimental-features "nix-command flakes" \
-        --no-write-lock-file \
-        --refresh
-end
+else
+    if test "$ostype" = "dw"
+        darwin-rebuild switch \
+            --flake "github:MrGrappleMan/bento#$target_attribute" \
+            --extra-experimental-features "nix-command flakes" \
+            --no-write-lock-file \
+            --refresh
+    fi
+fi
