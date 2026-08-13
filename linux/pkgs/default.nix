@@ -1,8 +1,4 @@
-#!/usr/bin/env fish
-
-# (@) PKG Distro derived versioning
-# Distro-sync - Packages versions are set to the version meant for that version of the distro
-# for coordinated versioning.
+# In dnf5, distro-sync, pkg versions follow the latest suitable compatible version meant for the distro
 #
 # Updating - Packages are bindly updated, but some may break compatibility
 # with each other and not coordinate
@@ -10,9 +6,9 @@
 # You want a system that works correctly,
 # and not just packages with a higher version that may not properly coordinate with each other.
 # Distro-sync also fixes conflicts and missing dependencies
-# May behave abnormally on rawhide versions. This is better for the bootc philosophy, overall.
+# Avoid on rawhide. This is better for the bootc philosophy, overall.
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [

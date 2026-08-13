@@ -19,7 +19,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:nixos/nixos-hardware";
-    nix-flatpak.url = "github:gmodena/nix-flatpak";
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -62,34 +62,18 @@
           #planned later
         ];
       };
-      # Server aarch64
-      "nx-srv-arm" = nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
-        modules = [
-          home-manager.nixosModules.home-manager
-          #planned later
-        ];
-      };
       # Desktop x86_64
       "nx-dsk-x86" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           home-manager.nixosModules.home-manager
-          inputs.nix-flatpak.nixosModules.nix-flatpak
+          nix-flatpak.nixosModules.nix-flatpak
           ./linux/hardware-configuration.nix
           ./linux/boot
           ./linux/flatpak
           ./linux/pkgs
           ./linux/systemd
           ./linux/xdg
-        ];
-      };
-      # Server x86_64
-      "nx-srv-x86" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          home-manager.nixosModules.home-manager
-          #Planned later
         ];
       };
     };
