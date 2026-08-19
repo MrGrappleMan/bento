@@ -6,82 +6,71 @@
 sys_name=$(uname -s)
 ostype=""
 
+if [[ $EUID -eq 0 ]]; then
+    echo "This script should not be executed as root! Exiting..."
+    exit 1
+fi
+
 case "$sys_name" in
     Darwin)
-        # 🔍 Nix presence check
-        if ! command -v nix >/dev/null 2>&1; then
-            echo "❌ Error: Nix is not installed or not in PATH."
-            exit 1
-        fi
+        # Lix/Nix
+            echo "Installing Lix"
+            curl --proto '=https' --tlsv1.2 -sSf -L https://install.lix.systems/lix | sh -s -- install --no-confirm
+            echo "Refreshing bash"
+            source ~/.bashrc
 
-        # 🔍 SIP status check
-        if command -v csrutil >/dev/null 2>&1; then
-            sip_status=$(csrutil status)
-            echo "ℹ️ macOS SIP Status: $sip_status"
-        else
-            echo "⚠️ Warning: Unable to verify SIP status via csrutil."
-        fi
+        # Brew
+            echo "Installing Brew"
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            echo "Refreshing bash"
+            source ~/.bashrc
+            # Get git from Homebrew
+                echo "Installing Git"
+                brew install git
+                echo "Refreshing bash"
+                source ~/.bashrc
+
+        # SIP status check
+            sip_status=$(csrutil status 2>&1)
+            if echo "$sip_status" | grep -q "disabled"; then
+                echo "Error: System Integrity Protection (SIP) has disabled components."
+                echo "To get the original state, follow video or this text if you continue getting this error."
+                echo
+                echo "Video guide: https://www.youtube.com/watch?v=Fx_1OPFzu88&t=29s"
+                echo
+                echo "Enter Recovery Mode: Shut down your Mac, then press and hold the power button until the text, \"Loading startup options\" appears."
+                echo "Access Terminal: Select Options > Continue, log in, and then navigate to Utilities > Terminal."
+                echo "Reset CSRutil: Type \"sudo csrutil reset\", press Return, type Y to confirm, and enter your administrator password."
+                echo "Restart: Once the process completes, restart the machine for the changes to take effect."
+                echo "Verification: Log back in and run \"csrutil status\" in Terminal again to ensure SIP is enabled."
+                echo
+                open https://www.youtube.com/watch?v=Fx_1OPFzu88&t=29s
+                read -r -p "Press any key to quit..." -n1 -s
+                exit 1
+            fi
 
         ostype="dw"
         ;;
 
     Linux)
-        # 🔍 Verify system is NixOS
-        if [ ! -e /etc/NIXOS ]; then
-            echo "❌ Error: Host operating system is not NixOS (/etc/NIXOS missing)."
-            exit 1
-        fi
-
-        # 🔍 Nix presence check
-        if ! command -v nix >/dev/null 2>&1; then
-            echo "❌ Error: Nix is not installed or not in PATH."
-            exit 1
+        # Is official NixOS?
+        if [[ ! "$(grep -i nixos </etc/os-release)" ]]; then
+          echo "This only works on proper NixOS! Get it from https://nixos.org/download/"
+          echo "You can run this in either the installed environment or a live booted image(intended for first-time setup only)."
+          exit 1
         fi
 
         ostype="nx"
         ;;
 
     *)
-        echo "❌ Error: Unsupported operating system ($sys_name)."
+        echo "($sys_name) is unsupported"
         exit 1
         ;;
 esac
 
-echo "✅ OS Check Passed: ostype = $ostype"
-
 # ------------------------------------------------------------------------------
-# 🎯 Step 2: Target Environment Selection
-# ------------------------------------------------------------------------------
-echo ""
-echo "Select Target Environment Type:"
-echo "  • dsk : Desktop / Workstation (Default)"
-echo "  • srv : Headless Server Engine"
-
-# Handle interactive prompting when piped directly (e.g. curl | bash)
-if [ -t 0 ]; then
-    read -p "Target environment type? [dsk/srv] (default: dsk): " env_input
-else
-    if [ -c /dev/tty ]; then
-        read -p "Target environment type? [dsk/srv] (default: dsk): " env_input < /dev/tty
-    else
-        env_input="dsk"
-    fi
-fi
-
-usecase=""
-case "$env_input" in
-    srv|server|2)
-        usecase="srv"
-        ;;
-    *)
-        usecase="dsk"
-        ;;
-esac
-
-echo "✅ Target Environment Selected: $usecase"
-
-# ------------------------------------------------------------------------------
-# 🧬 Step 3: Automatic Architecture Derivation
+# 🧬 Step 2: Automatic Architecture Derivation
 # ------------------------------------------------------------------------------
 raw_arch=$(uname -m)
 arch=""
@@ -90,19 +79,17 @@ case "$raw_arch" in
     x86_64)
         arch="x86"
         ;;
-    arm64|aarch64)
+    arm64)
         arch="arm"
         ;;
     *)
-        echo "❌ Error: Unsupported architecture ($raw_arch). Must be x86_64 or arm64/aarch64."
+        echo "Only x86_64 or arm64 is supported"
         exit 1
         ;;
 esac
 
-echo "✅ Architecture Derived: $arch (from $raw_arch)"
-
 # ------------------------------------------------------------------------------
-# 📦 Step 3.5: Repository Management & Hardware Configuration
+# 📦 Step 3: Repository Management & Hardware Configuration
 # ------------------------------------------------------------------------------
 # Helper function to run git, using nix-shell fallback if git is not installed
 git_cmd() {
@@ -163,13 +150,9 @@ if [ "$ostype" = "nx" ]; then
 fi
 
 # ------------------------------------------------------------------------------
-# 🚀 Step 4: Dynamic Rebuild Phase
+# 🚀 Step 4: Build and Reboot
 # ------------------------------------------------------------------------------
-target_attribute="$ostype-$usecase-$arch"
-
-echo ""
-echo "🚀 Deploying target attribute: $repo_dir#$target_attribute"
-echo "------------------------------------------------------------------------------"
+target_attribute="$ostype-$arch"
 
 # Require rebooting on NixOS
 if [ "$ostype" = "nx" ]; then
@@ -178,6 +161,7 @@ if [ "$ostype" = "nx" ]; then
         --option extra-experimental-features "nix-command flakes" \
         --no-write-lock-file \
         --refresh
+    systemctl reboot
 else
     if [ "$ostype" = "dw" ]; then
         darwin-rebuild switch \
@@ -186,4 +170,5 @@ else
             --no-write-lock-file \
             --refresh
     fi
+    sudo shutdown -r now
 fi

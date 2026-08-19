@@ -7,9 +7,8 @@ A NixOS / MacOS configuration repository for performance and productivity.
 
 ## ⚙️ Installation
 
-Simply run the following command to install, you may need to enter your password
-a few times.
+Simply run the following command to install, you may need to enter your password a few times, but do not use sudo here directly.
 
 ```bash
-sudo bash -c "$(curl -fsSL -H "Cache-Control: no-cache" https://raw.githubusercontent.com/MrGrappleMan/bento/refs/heads/main/start.sh)"
+bash -c "$(curl -fsSL -H "Cache-Control: no-cache" https://raw.githubusercontent.com/MrGrappleMan/bento/refs/heads/main/start.sh)"
 ```
