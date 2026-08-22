@@ -1,78 +1,75 @@
 { config, pkgs, ... }: {
 
   system.activationScripts.postUserActivation.text = ''
-# Power Management
-# Intended for balanced system longevity and efficiency, while also allowing maximum safe performance levels.
-# User should use Caffeine to keep important processes running when triggered.
-# Use TouchID for convenience or disable lock upon screen sleep
-# https://ss64.com/mac/pmset.html
-# https://www.unix.com/man_page/osx/1/pmset/
+    # Balanced system longevity, efficiency, yet allow access to maximum safe performance levels.
+    # You must balance power consumption, data integrity, security, NAND wear appropriately as per the situation.
+    # Use Caffeine on macbooks to keep the system running for tasks like compiling, rendering, or running simulations.
+    # Use TouchID for convenience or disable lock upon screen sleep
+    # Sources: 
+      # https://ss64.com/mac/pmset.html
+      # https://www.unix.com/man_page/osx/1/pmset/
+      # https://www.dssw.co.uk/reference/pmset/
 
-# Source-agnostic settings:
-    
-    # Sleeping phase order:
-     # 1. Time from inactivity to sleep Display / Disk
+    # displaysleep ( No HID input > Display sleep )
+      # Display sleep timer in minutes.
+      # Set to a low value to avoid display burn-in, discoloration, and reduce power consumption.
+      # 0: Display never turns off after idling
+      # X: Display turns off after X minutes of inactivity (should be ideally less than Y / sleep timer)
+
+    # sleep ( No HID input or process wakelock > System sleep )
+      # Sleep timer in minutes, can halt important background tasks, recommended for battery life
+      # 0: System never sleeps
+      # Y: System sleeps after Y minutes of inactivity
+
+    # disksleep ( No I/O activity to target HDD > Disk sleeps )
+      # Sleep timer for external HDDs
+      # 0: Motor never stops, but high disk lifes,
+      # +ve integers: Make disk sleep after X minutes of inactivity. Some believe that the value does not matter, as the hardware decides when to make the disk sleep.
+      # No impact on SSDs. And internal NAND chip is firmware managed.
+
+    # hibernatemode
+      # 0: ( HB0: Forced s2idle, masked hibernate.target )
+        # RAM only, hibernation triggers do not do anything.
+        # Less SSD writes. But uses more power, so not good for battery based sources ( -b and -u ).
+      # 3: ( HB3: Like hybrid-sleep.target, graceful )
+        # RAM + Disk, minor power consumption, best with BAT/UPS
+        # Writes to disk are performed after pure RAM sleep.
+        # Balances power consumption and data safety. Power management is done on a slow-halting spectrum.
+      # 25: ( HB25: Traditional hibernation )
+        # Disk only, RAM contents are discarded immediately after hibernation.
+        # Can be frustrating if you need to wake up quickly from hibernation, else maintains battery well.
+
+    # Source-agnostic settings:
       sudo pmset -a displaysleep 4
-      # Turn off display after 4 minutes of inactivity ( Less burn-in, discoloration, power )
 
-      sudo pmset -a disksleep 10
-      # Disk sleep:
-      # 0: Disks are always on, no sleep.
-      # Any +ve integer: Disk auto sleeps, this value is not of concern, only its presence.
-      # This does not affect the internal NAND's power management
-
-     # 2. Time from inactivity to main sleep
-      sudo pmset -a sleep 5 # Sleep after 5 minutes of inactivity ( main reason )
-
-     # 3. Time from sleep to hibernation(entering standby)
-      sudo pmset -a standby 1
-      # Allow standby - the action which triggers hibernation, prior to which, sleep is RAM only
-      # Works on HB25, HB3, but not HB0. Entering standby stops power nap functionality.
-
-      
-     sudo pmset -a hibernatemode 3
-     # All power consumption, data integrity, data in RAM security, NAND wear is a concern. This requires careful consideration.
-     # Other hidden modes are not recommended.
-  
-     # Hibernatemode 0: ( HB0: Forced s2idle, masked hibernate.target )
-      # RAM only, hibernation triggers are ignored, best with AC
-      # Saves NAND writes but uses more power. Not good for BAT/UPS, loss of data may occur.
-      # For headless AC, use Wake on LAN (WoL) or some launchd service that wakes the system, if saving energy when your clusters sleep.
-  
-     # Hibernatemode 3: ( HB3: Like hybrid-sleep.target, graceful )
-      # RAM + Disk, minor power consumption, best with BAT/UPS
-      # True writes to disk are performed after an optimal period post sleep.
-      # Balances power consumption and data safety. Power management is done on a slow-halting spectrum.
-  
-     # Hibernatemode 25: ( HB25: Traditional hibernation )
-      # Disk only, RAM contents are discarded immediately after hibernation.
-      # Can be frustrating if you need to wake up quickly from hibernation, else maintains battery well.
-      
-  sudo pmset -a powermode 0
+    sudo pmset -a powermode 0
     # Set to auto for all power sources, intelligent regulation.
     # It prioritizes efficiency, with uncapped safe performance levels.
-    # Low power mode sets a hard cap, high performance mode has reduced efficiency.
 
- sudo pmset -a standby 1
- # Allow standby - the action which triggers hibernation, prior to which, sleep is RAM only
- # Works on HB25, HB3, but not HB0. Entering standby stops power nap functionality.
+    sudo pmset -a standby 1
+    # ... > Sleep > [ Standby, proceed to trigger hibernation if 1 ] > Write to disk > ...
+    # Works on HB25/HB3, not HB0. Entering standby stops power nap functionality.
 
-# Source-specific settings overrides:
- # Where different settings for each source yields better results.
+    # Source-specific settings:
+    # Where different settings for each source yields better results.
 
- # Battery Power (BAT -b)
-  # HB3 is the better choice here
-  sudo pmset -b lessbright 1
-    # System reduces some brightness when switching to X power source
+    # Battery Power (BAT -b)
+    # HB3 is a good balance here
+    pmset -b hibernatemode 3
 
+    # Backup power UPSes (UPS -u)
+    # The system is at a critical situation, hibernate to disk fast.
 
- # Uninterruptible Power Supply (UPS -u)
-  # Objective: Terminal emergency state. Dump to disk and kill power fast when inactive
-
- # Charger / Wall Power (AC -c)
-  # For charging, HB0 is the default and is perfectly fine, as the battery is a failsafe.
-  # For AC, HB3(like wait 18 hours before hibernation) is better as it saves to disk.
-  # For most people, this doesn't matter, but there may be accidental power cuts. In that case, you should just save your data.
-
+    # Charger / Wall Power (AC -c)
+    # Optimized for reduced disk writes, background process activity persistence and clusters
+    # Portable power banks may get detected as this mode and waste battery life, though inbuilt batteries are designed to last.
+    # Sleep manually on power banks as a workaround for now, and unplug once fully charged. Replug at around 50%.
+    pmset -c hibernatemode 0 # Never hibernate writes to disk.
+    pmset -c sleep 0 # Let background tasks run (eg. BOINC). Can set to +ve, but be sure to have a way to wake headless systems.
+    pmset -c standby 0 # Never trigger the hibernation action if accidentally in sleep (partially redundant with hibernatemode 0)
+    pmset -c autopoweroff 0 # Extra EU compliance measure to be disabled.
+    pmset -c womp 1 # Wake on LAN (WOL) support if accidentally sleeping.
+    pmset -c disksleep 60 # Low mechanical stress, longer HDD lifespan.
+    pmset -c autorestart 1 # Automatically start the system again after a crash or power failure.
   '';
 }

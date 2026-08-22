@@ -22,3 +22,12 @@
     subGidRanges = [{ startGid = 100000; count = 65536; }];
   };
 }
+
+#<acct_mgr_login>
+#    <authenticator>86538_811dfb74da4e51f4baf5fd808ea992ab</authenticator>
+#</acct_mgr_login>
+
+#<acct_mgr>
+#    <name>Science United</name>
+#    <url>https://scienceunited.org/</url>
+#</acct_mgr>

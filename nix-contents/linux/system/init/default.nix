@@ -8,18 +8,6 @@
   systemd = {
     # Services
     services = {
-      power-profiles-daemon = {
-        enable = false;
-      };
-      tlp = {
-        enable = false;
-      };
-      tlp-pd = {
-        enable = false;
-      };
-      auto-cpufreq = {
-        enable = false;
-      };
 
       # Core System Service Targets
       systemd-timesyncd = {
@@ -77,12 +65,6 @@
     # ⏱️ Timers
     timers = {
       podman-auto-update = {
-        wantedBy = [ "timers.target" ];
-      };
-      uupd = {
-        wantedBy = [ "timers.target" ];
-      };
-      bootc-fetch-apply-updates = {
         wantedBy = [ "timers.target" ];
       };
       fstrim = {

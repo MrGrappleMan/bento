@@ -7,6 +7,5 @@
       ./cosmic
       ./fish
       ./flatpak
-      
-    ];
+  ];
 }
