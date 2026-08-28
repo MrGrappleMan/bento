@@ -1,6 +1,6 @@
 {
 
-  description = "Bento - the productivity suite for NixOS / MacOS";
+  description = "Bento - the productivity suite for MacOS";
 
   inputs = {
     lix-module = {
@@ -9,10 +9,6 @@
     };
     nixai.url = "github:olafkfreund/nix-ai-help";
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nix-cachyos-kernel = {
-      url = "github:xddxdd/nix-cachyos-kernel/release";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nix-darwin = {
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -32,10 +28,9 @@
 
   outputs = { self, nixpkgs, nix-cachyos-kernel, nix-darwin, nix-homebrew, home-manager, nixos-hardware, nix-flatpak, flake-parts, ... }@inputs: {
 
-    # MacOS, x86 support not practical
+    # MacOS
     darwinConfigurations = {
-      # aarch64
-      "dw-arm" = nix-darwin.lib.darwinSystem {
+      "main" = nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
           nix-homebrew.darwinModules.nix-homebrew
@@ -45,25 +40,6 @@
           ./darwin/launchctl
           ./darwin/misc
           ./darwin/pmset
-        ];
-      };
-    };
-
-    # NixOS
-    nixosConfigurations = {
-      # x86_64
-      "nx-x86" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          home-manager.nixosModules.home-manager
-          nix-flatpak.nixosModules.nix-flatpak
-          lix-module.nixosModules.default
-          ./linux/customcfgs/hardware-configuration.nix
-          ./linux/boot
-          ./linux/flatpak
-          ./linux/pkgs
-          ./linux/systemd
-          ./linux/xdg
         ];
       };
     };

@@ -1,14 +1,11 @@
-# BENTO
+# Bento
 
-A NixOS / MacOS configuration repository for performance and productivity.
-
-![Contributors](https://img.shields.io/github/contributors/MrGrappleMan/bento?style=for-the-badge)
-![Stars](https://img.shields.io/github/stars/MrGrappleMan/bento?style=for-the-badge)
+Workstation focused MacOS nix configuration repository for performance, productivity and energy efficiency.
 
 ## ⚙️ Installation
 
-Simply run the following command to install, you may need to enter your password a few times, but do not use sudo here directly.
+Run this command to install, enter your password when prompted. May be multiple times.
 
-```bash
-bash -c "$(curl -fsSL -H "Cache-Control: no-cache" https://raw.githubusercontent.com/MrGrappleMan/bento/refs/heads/main/start.sh)"
+```zsh
+zsh -c "$(curl -fsSL -H "Cache-Control: no-cache" https://raw.githubusercontent.com/MrGrappleMan/bento/refs/heads/main/start.sh)"
 ```

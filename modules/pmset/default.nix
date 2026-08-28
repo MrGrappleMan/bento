@@ -42,7 +42,7 @@
     # Source-agnostic settings:
       sudo pmset -a displaysleep 4
 
-    sudo pmset -a powermode 0
+    # sudo pmset -a powermode 0
     # Set to auto for all power sources, intelligent regulation.
     # It prioritizes efficiency, with uncapped safe performance levels.
 
