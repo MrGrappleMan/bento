@@ -1,6 +1,5 @@
 {
-
-  description = "Bento - the productivity suite for MacOS";
+  description = "A MacOS productivity suite";
 
   inputs = {
     lix-module = {
@@ -26,7 +25,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, nix-cachyos-kernel, nix-darwin, nix-homebrew, home-manager, nixos-hardware, nix-flatpak, flake-parts, ... }@inputs: {
+  outputs = { self, nixpkgs, nix-darwin, nix-homebrew, home-manager, flake-parts, ... }@inputs: {
 
     # MacOS
     darwinConfigurations = {
@@ -35,11 +34,11 @@
         modules = [
           nix-homebrew.darwinModules.nix-homebrew
           home-manager.darwinModules.home-manager
-          ./darwin/brew
-          ./darwin/defaults
-          ./darwin/launchctl
-          ./darwin/misc
-          ./darwin/pmset
+          ./modules/brew
+          ./modules/defaults
+          ./modules/launchctl
+          ./modules/misc
+          ./modules/pmset
         ];
       };
     };

@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 clear
+source ~/.zshrc
 
 # ------------------------------------------------------------------------------
 # ⚙️ Prerequisites:
@@ -46,30 +47,43 @@ clear
 # Get required software:
 # Lix
 # Homebrew
+# # Git
 # ------------------------------------------------------------------------------
 
 # Lix
-    curl --proto '=https' --tlsv1.2 -sSf -L https://install.lix.systems/lix | sh -s -- install --no-confir
+    if command -v nix >/dev/null 2>&1; then
+        nix_ver=$(nix --version 2>&1)
+        if [[ "$nix_ver" == *"Lix"* ]]; then
+            echo "Lix already present, skipping installation"
+        else
+            echo "Replacing Nix with Lix"
+            curl -sSf -L "https://git.lix.systems/lix-project/lix/raw/tag/2.95.3/misc/upgrade-lix.sh" | sudo --preserve-env=PATH bash -s -- 2.95.3
+        fi
+    else
+        echo "Installing Lix"
+        curl --proto '=https' --tlsv1.2 -sSf -L https://install.lix.systems/lix | sh -s -- install --no-confirm
+    fi
     source ~/.zshrc
 
 # Brew
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo "Installing Homebrew"
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     source ~/.zshrc
     # Git
-        brew install git
+        brew install -y git
         source ~/.zshrc
 
 # ------------------------------------------------------------------------------
-# Apply and reboot
+# Apply
 # ------------------------------------------------------------------------------
 
 # Apply configuration
-darwin-rebuild switch \
-    --flake "$repo_dir#main" \
-    --option extra-experimental-features "nix-command flakes" \
-    --no-write-lock-file \
-    --refresh
+    echo "Applying configuration"
+    darwin-rebuild switch \
+        --flake "$repo_dir#main" \
+        --option extra-experimental-features "nix-command flakes" \
+        --no-write-lock-file \
+        --refresh
 
-# Reboot
-echo "Rebooting"
-sudo shutdown -r now
+# Reboot reminder
+    echo "Please reboot to apply changes"
