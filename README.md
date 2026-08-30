@@ -5,9 +5,9 @@ productivity and energy efficiency.
 
 ## ⚙️ Installation
 
-Run this command to install, enter your password when prompted. May be asked \
-multiple times.
+Run this command to install, enter your password when prompted. 
+May be asked multiple times.
 
 ```zsh
-zsh -c "$(curl -fsSL -H "Cache-Control: no-cache" https://raw.githubusercontent.com/MrGrappleMan/bento/refs/heads/main/start.sh)"
+zsh -c "$(curl -H "Cache-Control: no-cache, no-store, must-revalidate" -H "Pragma: no-cache" -H "Expires: 0" -sSL https://raw.githubusercontent.com/MrGrappleMan/bento/refs/heads/main/start.sh)"
 ```

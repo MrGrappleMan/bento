@@ -44,7 +44,7 @@ source ~/.zshrc
     fi
 
 # ------------------------------------------------------------------------------
-# Get required software:
+# ⚙️ Get required software:
 # Lix
 # Homebrew
 # # Git
