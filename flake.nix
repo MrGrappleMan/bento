@@ -17,8 +17,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-hardware.url = "github:nixos/nixos-hardware";
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -27,9 +25,8 @@
 
   outputs = { self, nixpkgs, nix-darwin, nix-homebrew, home-manager, flake-parts, ... }@inputs: {
 
-    # MacOS
     darwinConfigurations = {
-      "main" = nix-darwin.lib.darwinSystem {
+      "worker" = nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
           nix-homebrew.darwinModules.nix-homebrew
@@ -41,6 +38,7 @@
           ./modules/pmset
         ];
       };
+      "interface"
     };
   };
 }

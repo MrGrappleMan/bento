@@ -14,14 +14,14 @@ productivity and energy efficiency.
 
 ## ✨ Modes and expected setup
 
-1. Thin Client
+1. Interface
 
 - The main workstation you physically interact with
 - Acts as an interface for the workstation
 - Prefer a Macbook Air or Neo
 - Compatible with Macbook Pros
 
-2. Powerhouse
+2. Worker
 
 - An AC only powered Mac
 - Runs heavy AI/compilation/rendering workloads
@@ -30,11 +30,12 @@ productivity and energy efficiency.
 - FileVault off, auto login on
 - Have a screen sharing client for tasks that require a GUI
 - Prefer a Mac Mini or Mac Studio
-- Compatibile with iMacs
+- Compatible with iMacs
 
 ## ⚙️ Installation
 
-Run this in any terminal, then reboot after installation to apply changes
+Run this in any terminal, follow the instructions, then reboot after \
+installation to apply changes
 
 ```zsh
 zsh -c "$(curl -H "Cache-Control: no-cache, no-store, must-revalidate" -H "Pragma: no-cache" -H "Expires: 0" -sSL https://raw.githubusercontent.com/MrGrappleMan/bento/refs/heads/main/start.sh)"

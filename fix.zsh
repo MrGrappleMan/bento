@@ -1,30 +1,31 @@
 #!/usr/bin/env zsh
 set -euo pipefail
 
-echo "🔧 Attempting safe system problem fixes"
-echo "Expect minor slowdowns due to cache removal"
 
-# 1. Reset ATS font database
-sudo atsutil databases -remove
 
-# 2. User and system caches
-rm -rf ~/Library/Caches/* 2>/dev/null || true
-
-sudo rm -rf /Library/Caches/* 2>/dev/null || true
-
-# 3. DNS cache
-sudo dscacheutil -flushcache
-sudo killall -HUP mDNSResponder
-
-# 4. Reset ambient display sensors
-sudo pmset resetdisplayambientparams
-
-echo "Wipe.DS_Store files?"
-echo -n "Continue? (y/N): "
-read -k 1 -t 10 reply
-echo ""
-if [[ "$reply" == "y" || "$reply" == "Y" ]]; then
-  find ~ -name '.DS_Store' -depth -exec rm {} \; 2>/dev/null || true
-fi
-
-echo "
+# Basic fixes attempts
+    echo "🔧 Attempting safe system problem fixes"
+    echo "Expect minor slowdowns due to cache removal"
+    # Reset ATS font database
+        sudo atsutil databases -remove
+    # User and system caches
+        rm -rf ~/Library/Caches/*
+        sudo rm -rf /Library/Caches/*
+    # DNS cache
+        sudo dscacheutil -flushcache
+        sudo killall -HUP mDNSResponder
+    # Reset ambient display sensors
+        sudo pmset resetdisplayambientparams
+# Risky fix methods
+    echo "🔧 Attempting risky problem fixes"
+    # .DS_Store wipe
+        echo "Wipe .DS_Store files?"
+        echo "Any custom folder arrangements, sorted views, or specific icon placements that"
+        echo "you have manually arranged in Finder will be reset to default to fix issues"
+        echo -n "Continue? : "
+        if [[ "$reply" == "y" || "$reply" == "Y" ]]; then
+            find ~ -name '.DS_Store' -depth -exec rm {} \;
+        fi
+# Reboot
+    echo "Rebooting to apply fixes and leftover"
+    sudo shutdown -r now
