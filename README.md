@@ -18,7 +18,8 @@ productivity and energy efficiency.
 
 - The main workstation you physically interact with
 - Acts as an interface for the workstation
-- Either a Macbook Air or Neo
+- Prefer a Macbook Air or Neo
+- Compatible with Macbook Pros
 
 2. Powerhouse
 
@@ -26,9 +27,10 @@ productivity and energy efficiency.
 - Runs heavy AI/compilation/rendering workloads
 - Preferably headless and Ethernet connected
 - Treated as a part of your 24/7 homelab
-- Either a Mac Mini or Mac Studio
 - FileVault off, auto login on
 - Have a screen sharing client for tasks that require a GUI
+- Prefer a Mac Mini or Mac Studio
+- Compatibile with iMacs
 
 ## ⚙️ Installation
 
