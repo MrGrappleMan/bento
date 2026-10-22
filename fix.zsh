@@ -1,8 +1,6 @@
 #!/usr/bin/env zsh
 set -euo pipefail
 
-
-
 # Basic fixes attempts
     echo "🔧 Attempting safe system problem fixes"
     echo "Expect minor slowdowns due to cache removal"
@@ -27,5 +25,5 @@ set -euo pipefail
             find ~ -name '.DS_Store' -depth -exec rm {} \;
         fi
 # Reboot
-    echo "Rebooting to apply fixes and leftover"
-    sudo shutdown -r now
+    echo "It is recommended to reboot as soon as possible"
+echo "avoid doing any important work till you reboot"
