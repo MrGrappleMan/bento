@@ -42,18 +42,7 @@ with lib;
       ];
 
       brews = [
-        "ollama"
-        "ffmpeg"
-        "fish"
-        "aria2"
-        "zoxide"
-        "fzf"
-        "macfuse"
-        "podman"
-        "mas" # CLI for App Store interaction
-        "defaultbrowser" # Set default browser utility
-        "nmap"
-        "wireshark"
+        "defaultbrowser" # Set default browser
         "mosh"
         "sshuttle"
         "tailscale"
@@ -62,8 +51,6 @@ with lib;
         "snowflake"
         "onionhop"
         "speedtest-cli"
-        "ncrack"
-        "aircrack-ng"
         "git"
         "git-lfs"
         "jj"
@@ -78,7 +65,6 @@ with lib;
         "podman-compose"
         "podman-desktop"
         "kubectl"
-        "obs"
       ];
       # Common
       casks = [
@@ -86,10 +72,20 @@ with lib;
       "localsend"
       ];
       brews = [
+      "obs"
       ];
       # Worker
       casks = [
         "boinc"
+        "ollama"
+        "ffmpeg"
+        "fish"
+        "aria2"
+        "zoxide"
+        "fzf"
+        "macfuse"
+        "podman"
+        "mas" # Like winget for App Store
       ];
       brews = [
       ];
@@ -107,6 +103,20 @@ with lib;
         "tor-browser@alpha"
         "moonlight"
       ];
+      brews = [
+      ];
+      # Hacker hai bhai
+      casks = [
+        "nmap"
+        "wireshark"
+        "ncrack"
+        "aircrack-ng"
+      ]
+      brews = [
+      ];
+      # Creativitymaxxing
+      casks = [
+      ]
       brews = [
       ];
     };
