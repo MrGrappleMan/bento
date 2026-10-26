@@ -79,18 +79,20 @@ with lib;
         "podman-desktop"
         "kubectl"
         "obs"
-        "krita"
       ];
       # Common
       casks = [
+      "utm"
       "localsend"
       ];
+      # Worker
       casks = [
         "boinc"
       ];
+      brews = [
+      ];
+      # Interface
       casks = [
-        "utm"
-        "localsend"
         "glazewm"
         "zebar"
         "raycast"
