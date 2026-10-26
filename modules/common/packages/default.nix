@@ -85,6 +85,8 @@ with lib;
       "utm"
       "localsend"
       ];
+      brews = [
+      ];
       # Worker
       casks = [
         "boinc"
@@ -104,6 +106,8 @@ with lib;
         "bitchat-tui"
         "tor-browser@alpha"
         "moonlight"
+      ];
+      brews = [
       ];
     };
   };
