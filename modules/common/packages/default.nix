@@ -81,7 +81,13 @@ with lib;
         "obs"
         "krita"
       ];
-
+      # Common
+      casks = [
+      "localsend"
+      ];
+      casks = [
+        "boinc"
+      ];
       casks = [
         "utm"
         "localsend"
@@ -90,18 +96,12 @@ with lib;
         "raycast"
         "maintenance"
         "onlyoffice"
-        "boinc"
-        "bitchat-tui"
-        "tor-browser@alpha"
-        "moonlight"
-        "bitchat-tui"
-        "metasploit"
-        "blender"
-      ];
-      casks = [
         "github-desktop-plus"
         "zed"
         "warp"
+        "bitchat-tui"
+        "tor-browser@alpha"
+        "moonlight"
       ];
     };
   };
